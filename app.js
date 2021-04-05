@@ -17,6 +17,7 @@ const searchSong = () => {
     const searchText = document.getElementById('search-field').value
    
     const url = `https://api.lyrics.ovh/suggest/${searchText}`
+    toggleSpinner(true);
     fetch(url)
         .then(response => response.json())
         .then(json => displaySong(json.data))
@@ -46,7 +47,7 @@ const displaySong = songs => {
             </div>
         `
         songContainer.appendChild(songDiv)
-
+        toggleSpinner(false)
     }
 }
 // const displayLyrics = async (artist, title) => {
@@ -71,6 +72,7 @@ const displaySong = songs => {
 const displayLyrics = (artist, title) => {
     // console.log(artist, title)
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
+    toggleSpinner()
     fetch(url)
         .then(response => response.json())
         .then(json => displayLyricsInfo(json.lyrics))
@@ -79,9 +81,45 @@ const displayLyrics = (artist, title) => {
 const displayLyricsInfo = lyrics => {
     const lyricsDiv = document.getElementById('song-lyrics')
     lyricsDiv.innerText = lyrics
+    toggleSpinner()
 }
 
 const displayError = error => {
     const errorTag = document.getElementById('error-message')
     errorTag.innerText = error
 }
+// ..... using toggle >>>
+const toggleSpinner = (show) => {
+    const spinner = document.getElementById('loading-spinner')
+    const songs = document.getElementById('song-container')
+    const lyrics = document.getElementById('song-lyrics')
+   spinner.classList.toggle('d-none');
+   songs.classList.toggle('d-none');
+   lyrics.classList.toggle('d-none')
+}
+
+// const toggleSpinner = (show) => {
+//     const spinner = document.getElementById('loading-spinner')
+//     if(show){
+//         spinner.classList.remove('d-none');
+
+//     }
+//     else{
+
+//         spinner.classList.add('d-none')
+//     }
+// }
+
+// ......javaScript seach box enter key .......
+
+var searchButton = document.getElementById("search-button");
+var searchField = document.getElementById("search-field")
+    searchField.addEventListener("keypress", function(event) {
+    console.log('working')
+    event.preventDefault();
+    console.log('keycode', event.keyCode)
+    if (event.keyCode == 13){
+        searchButton.click();
+    }
+        
+});
